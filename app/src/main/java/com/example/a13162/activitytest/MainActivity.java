@@ -275,15 +275,24 @@ public class MainActivity extends BaseNfcActivity {
                 Log.d("abcd","msg is null");
 
             String xcx=null;
+            String path=null;
+            int i=0;
             if(mTagText.indexOf("xcx:")==0){
-                xcx=mTagText.substring(4);
-                Log.d("xcx",xcx);
+                i=mTagText.indexOf("path:");
+                if(i<0){
+                    xcx=mTagText.substring(4);
+                }else{
+                    xcx=mTagText.substring(4,i);
+                    i=i+5;
+                    path=mTagText.substring(i);
+                }
+                Log.d("xcx","xcx id is "+xcx+" paht is "+path);
 
             }
             //在外面扫到小程序直接跳
             if(startFlag==true&&xcx!=null){
                 startFlag=false;
-                jumpToXCX(xcx);
+                jumpToXCX(xcx,path);
                 return;
             }
 
@@ -293,13 +302,14 @@ public class MainActivity extends BaseNfcActivity {
             }else if(Data.getIsactive()==1){
                 if(xcx!=null){
                     final String str=xcx;
+                    final String str1=path;
                     AlertDialog.Builder dialog=new AlertDialog.Builder(MainActivity.this);
                     dialog.setTitle("发现一个小程序");
                     dialog.setMessage("是否跳转？");
                     dialog.setPositiveButton("跳转", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            jumpToXCX(str);
+                            jumpToXCX(str,str1);
                         }
                     });
                     dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -321,13 +331,16 @@ public class MainActivity extends BaseNfcActivity {
         }
     }
     //跳转小程序
-    private void jumpToXCX(String xcxid){
+    private void jumpToXCX(String xcxid,String xcxpath){
         String appId = "wx22f60e47bd1eb936"; // 填应用AppId
         IWXAPI api = WXAPIFactory.createWXAPI(MainActivity.this, appId);
 
         WXLaunchMiniProgram.Req req = new WXLaunchMiniProgram.Req();
         req.userName = xcxid; // 填小程序原始id
-        //req.path = null;                  //拉起小程序页面的可带参路径，不填默认拉起小程序首页
+        if(xcxpath!=null){
+            req.path = xcxpath;
+        }
+        //                  //拉起小程序页面的可带参路径，不填默认拉起小程序首页
         req.miniprogramType = WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_PREVIEW;// 可选打开 开发版，体验版和正式版
         api.sendReq(req);
     }
