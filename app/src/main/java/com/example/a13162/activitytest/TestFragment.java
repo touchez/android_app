@@ -51,7 +51,7 @@ public class TestFragment extends Fragment {
     private void initView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new VideoRecyclerViewAdapter(DataUtil.getVideoList(), getActivity()));
+        recyclerView.setAdapter(new VideoRecyclerViewAdapter(DataUtil.getVideoList()));
         recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
             @Override
             public void onChildViewAttachedToWindow(View view) {
