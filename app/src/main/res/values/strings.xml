@@ -1,9 +1,11 @@
 <resources>
-    <string name="app_name">WeTouch</string>
+    <string name="app_name">Touchez</string>
 
     <string name="turn_on_flashlight">Turn on Flashlight</string>
     <string name="turn_off_flashlight">Turn off Flashlight</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">this is nfc page</string>
+    <string name="title1">标题：</string>
+    <string name="title2">内容：</string>
 </resources>
