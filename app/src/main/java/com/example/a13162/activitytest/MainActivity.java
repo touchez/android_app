@@ -4,40 +4,24 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
+import android.os.Bundle;
 import android.os.Parcelable;
-import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
-import com.google.android.gms.common.internal.Constants;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
@@ -49,8 +33,6 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static android.os.ParcelFileDescriptor.MODE_APPEND;
 
 public class MainActivity extends BaseNfcActivity {
     String mTagText;
@@ -272,12 +254,16 @@ public class MainActivity extends BaseNfcActivity {
             if(mTagText!=null)
                 Log.d("abcd",mTagText);
             else
+            {
+                mTagText="This is a null tag!!!";
                 Log.d("abcd","msg is null");
+            }
+
 
             String xcx=null;
             String path=null;
             int i=0;
-            if(mTagText.indexOf("xcx:")==0){
+            if(mTagText!=null&&mTagText.indexOf("xcx:")==0){
                 i=mTagText.indexOf("path:");
                 if(i<0){
                     xcx=mTagText.substring(4);

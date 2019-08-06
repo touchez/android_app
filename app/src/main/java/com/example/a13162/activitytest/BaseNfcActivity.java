@@ -7,6 +7,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.tech.MifareClassic;
 import android.nfc.tech.NfcA;
 import android.support.v7.app.AppCompatActivity;
+
 /**
  * Author:Created by Ricky on 2017/8/25.
  * Email:584182977@qq.com

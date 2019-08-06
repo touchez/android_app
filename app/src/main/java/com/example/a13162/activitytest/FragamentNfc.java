@@ -1,30 +1,23 @@
 package com.example.a13162.activitytest;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentHostCallback;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import java.util.Arrays;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -34,18 +27,7 @@ public class FragamentNfc extends Fragment {
     private ImageView imageView;
     private Button button;
     private ArrayAdapter<String> adapter;
-    public FragamentNfc() {
-        // Required empty public constructor
-    }
-  /* public void onNewIntent(Intent intent) {
-        //1.获取Tag对象
-        Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        //2.获取Ndef的实例
-        Ndef ndef = Ndef.get(detectedTag);
-        mTagText = ndef.getType() + "\nmaxsize:" + ndef.getMaxSize() + "bytes\n\n";
-        readNfcTag(intent);
-        Log.d("abcd",mTagText);
-    }*/
+    public FragamentNfc() {}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,11 +43,6 @@ public class FragamentNfc extends Fragment {
                         imageView.setImageResource(R.drawable.nfckaifa);
                         Toast.makeText(getActivity(),"开发者模式已开启",Toast.LENGTH_SHORT).show();
                         Data.change();
-                        //Intent intent1=new Intent(this,ReadTextActivity.class);
-                        //startActivity(intent1);
-                        /*FragmentTag ft=(FragmentTag)getActivity().getSupportFragmentManager().findFragmentById(R.id.navigation_notifications);
-                        ft.showInputDialog(mTagText);*/
-                        //showInputDialog(mTagText);
                         break;
                     case 0:
                         imageView.setImageResource(R.drawable.nfcyingyong);

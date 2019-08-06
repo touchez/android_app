@@ -15,21 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static android.content.Context.MODE_PRIVATE;
-import static android.os.ParcelFileDescriptor.MODE_APPEND;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class FragmentTag extends Fragment {
 
     private String[] data={};
@@ -38,7 +30,6 @@ public class FragmentTag extends Fragment {
     private int k=0;
     private MainActivity activity;
 
-    //public ArrayAdapter<String> adapter;
     public TagAdapter adapter;
 
 
@@ -51,17 +42,13 @@ public class FragmentTag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        //Data.tagListAdd(apple);
-        //Data.tagListAdd(banana);
-        // Inflate the layout for this fragment
         Log.d("abcd","create fg view");
         SharedPreferences pref=getContext().getSharedPreferences("data", MODE_PRIVATE);
         i=pref.getInt("number",0);
 
         Log.d("first i",i+"");
         //防止多次切换重复读取
-        if(i>Data.getTagList().size()){
+        if(i> Data.getTagList().size()){
             Log.d("abcd","i is "+i);
             String editTextTitle,editTextContent;
             for(k=1;k<=i;k++) {
@@ -76,8 +63,7 @@ public class FragmentTag extends Fragment {
 
 
         View view=inflater.inflate(R.layout.fragment_tag_layout, container, false);
-        //adapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,Data.getTag())
-        adapter=new TagAdapter(getActivity(),R.layout.tag_item,Data.getTagList());
+        adapter=new TagAdapter(getActivity(), R.layout.tag_item, Data.getTagList());
 
         ListView listView=(ListView) view.findViewById(R.id.tag_list);
         listView.setAdapter(adapter);
@@ -87,7 +73,7 @@ public class FragmentTag extends Fragment {
                 TagClass tag=(TagClass) Data.getTagList().get(position);
                 Toast.makeText(getActivity(),tag.getTitle(),Toast.LENGTH_SHORT).show();
                 Toast.makeText(getActivity(),tag.getText(),Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(),TagPageActivity.class);
+                Intent intent = new Intent(getActivity(), TagPageActivity.class);
                 intent.putExtra("extra_data",position);
                 startActivity(intent);
             }
@@ -105,7 +91,6 @@ public class FragmentTag extends Fragment {
 
     }
     public void showInputDialog(){
-        //final EditText editText=new EditText(getActivity());
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View textEntryView = factory.inflate(R.layout.dialog,null);
 
@@ -113,26 +98,17 @@ public class FragmentTag extends Fragment {
         final EditText editTextContent = (EditText)textEntryView.findViewById(R.id.editTextContent);
 
         AlertDialog.Builder inputDialog=new AlertDialog.Builder(getActivity());
-        //inputDialog.setTitle("请输入要存取的id信息").setView(editText);
         inputDialog.setTitle("请输入要存取的id信息");
         inputDialog.setView(textEntryView);
         inputDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                //Data.addTag(editText.getText().toString());
                 Toast.makeText(getActivity(),editTextContent.getText().toString(),Toast.LENGTH_SHORT).show();
                 TagClass item=new TagClass(editTextTitle.getText().toString(),editTextContent.getText().toString());
                 Data.tagListAdd(item);
 
                 saveData(editTextTitle.getText().toString(),editTextContent.getText().toString());
-
-                //Data.tag(editText.getText().toString());
-                //Toast.makeText(getActivity(),editTextContent.getText().toString(),Toast.LENGTH_SHORT).show();
-
-
-
-                //Toast.makeText(getActivity(),item.getText(),Toast.LENGTH_SHORT).show();
 
                 adapter.notifyDataSetChanged();
 
@@ -145,15 +121,13 @@ public class FragmentTag extends Fragment {
         getAvailableActivity(new IActivityEnabledListener() {
             @Override
             public void onActivityEnabled(FragmentActivity activity) {
-//final EditText editText=new EditText(getActivity());
-                LayoutInflater factory = LayoutInflater.from(getActivity());
+               LayoutInflater factory = LayoutInflater.from(getActivity());
                 final View textEntryView = factory.inflate(R.layout.dialog,null);
 
                 final EditText editTextTitle = (EditText)textEntryView.findViewById(R.id.editTextTitle);
                 final EditText editTextContent = (EditText)textEntryView.findViewById(R.id.editTextContent);
 
                 AlertDialog.Builder inputDialog=new AlertDialog.Builder(getActivity());
-                //inputDialog.setTitle("存取该id信息").setView(editText);
                 inputDialog.setTitle("请输入要存取的id信息");
                 inputDialog.setView(textEntryView);
                 editTextTitle.setText("nfc tag");
@@ -165,10 +139,6 @@ public class FragmentTag extends Fragment {
                         Data.tagListAdd(item);
 
                         saveData(editTextTitle.getText().toString(),editTextContent.getText().toString());
-
-
-                        //Data.tag(editText.getText().toString());
-                        //Toast.makeText(getActivity(),editTextContent.getText().toString(),Toast.LENGTH_SHORT).show();
 
                         adapter.notifyDataSetChanged();
 
