@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -85,7 +86,51 @@ public class MainActivity extends BaseNfcActivity {
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
-
+        SharedPreferences pref=getSharedPreferences("nfc", MODE_PRIVATE);
+           String string=pref.getString("pages/activeCheck/activeCheck?type=exsanguinate","");
+           if(string!=null&&!Data.getnfclist().contains(string)) {
+               Data.getnfclist().add(string);
+           }
+        String string1=pref.getString("pages/activeCheck/activeCheck?type=ct","");
+        if(string1!=null&&!Data.getnfclist().contains(string1)) {
+            Data.getnfclist().add(string1);
+        }
+        String string2=pref.getString("pages/medicineList/medicineList","");
+        if(string2!=null&&!Data.getnfclist().contains(string2)) {
+            Data.getnfclist().add(string2);
+        }
+        String string3=pref.getString("pages/activeCheck/activeCheck?type=xray","");
+        if(string3!=null&&!Data.getnfclist().contains(string3)) {
+            Data.getnfclist().add(string3);
+        }
+        String string4=pref.getString("pages/detail/detail?departmentid=2","");
+        if(string4!=null&&!Data.getnfclist().contains(string4)) {
+            Data.getnfclist().add(string4);
+        }
+        String string5=pref.getString("pages/jiuzheng/jiuzheng","");
+        if(string5!=null&&!Data.getnfclist().contains(string5)) {
+            Data.getnfclist().add(string5);
+        }
+        String string6=pref.getString("pages/index/index","");
+        if(string6!=null&&!Data.getnfclist().contains(string6)) {
+            Data.getnfclist().add(string6);
+        }
+        String string7=pref.getString("pages/daoyouji/daoyouji","");
+        if(string7!=null&&!Data.getnfclist().contains(string7)) {
+            Data.getnfclist().add(string7);
+        }
+        String string8=pref.getString("pages/daoyouji2/daoyouji2?guideMachineName=甘肃彩陶文化简介","");
+        if(string8!=null&&!Data.getnfclist().contains(string8)) {
+            Data.getnfclist().add(string8);
+        }
+        String string9=pref.getString("pages/daoyouji2/daoyouji2?guideMachineName=安特生考察路线图","");
+        if(string9!=null&&!Data.getnfclist().contains(string9)) {
+            Data.getnfclist().add(string9);
+        }
+        for(int i=0;i<Data.getnfclist().size();i++)
+        {
+            System.out.println(Data.getnfclist().get(i));
+        }
         viewPager = (ViewPager) findViewById(R.id.vp);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -115,14 +160,13 @@ public class MainActivity extends BaseNfcActivity {
         list.add(TestFragment.newInstance("首页"));
         list.add(f);//nfc页面
         list.add(tag);//标签页面
-        //list.add(TestFragment.newInstance("。。"));
+        //list.add(TestFragment.newInstance(""));
         viewPagerAdapter.setList(list);
-
         startFlag=true;
         //直接跳转小程序
         resolveIntent(getIntent());
         startFlag=false;
-
+        //viewPager.setCurrentItem(1);
     }
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -272,7 +316,7 @@ public class MainActivity extends BaseNfcActivity {
                     i=i+5;
                     path=mTagText.substring(i);
                 }
-                Log.d("xcx","xcx id is "+xcx+" paht is "+path);
+                Log.d("xcx","xcx id is "+xcx+" path is "+path);
 
             }
             //在外面扫到小程序直接跳
@@ -324,11 +368,20 @@ public class MainActivity extends BaseNfcActivity {
         WXLaunchMiniProgram.Req req = new WXLaunchMiniProgram.Req();
         req.userName = xcxid; // 填小程序原始id
         if(xcxpath!=null){
-            req.path = xcxpath;
+            if(Data.getnfclist().contains(xcxpath)) {
+                System.out.println("找到了");
+                req.path = xcxpath;
+                req.miniprogramType = WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_PREVIEW;// 可选打开 开发版，体验版和正式版
+                api.sendReq(req);
+            }
+            else
+            {
+                System.out.println("没找到");
+            }
         }
         //                  //拉起小程序页面的可带参路径，不填默认拉起小程序首页
-        req.miniprogramType = WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_PREVIEW;// 可选打开 开发版，体验版和正式版
-        api.sendReq(req);
+       /* req.miniprogramType = WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_PREVIEW;// 可选打开 开发版，体验版和正式版
+        api.sendReq(req);*/
     }
 
 

@@ -10,20 +10,25 @@ public class Data{
     /*public static ArrayList getTag(){
         return tag;
     }*/
+    public static ArrayList<String> nfclist=new ArrayList<>();
+    private static List<TagClass> TagList1=new ArrayList<>();
     private static List<TagClass> TagList=new ArrayList<>();
     public static List getTagList(){
         return TagList;
     }
+    public static List getTagList1(){
+        return TagList1;
+    }
     public static void tagListAdd(TagClass item){
         TagList.add(item);
     }
+    public static void tagListAdd1(TagClass item){
+        TagList1.add(item);
+    }
+    public static ArrayList<String> getnfclist(){return nfclist;}
     //public static ArrayList<TagClass> tag2=new Arraylist<TagClass>();
-
-
-
    /* public static void addTag(String string){
         tag.add(string);
-
     }*/
     public static int getIsactive() {
         if(Data.active==false){
@@ -32,14 +37,12 @@ public class Data{
             return 1;
         }
     }
-
     public static void change() {
         if(Data.active==false){
             Data.active=true;
         }else{
             Data.active=false;
         }
-
     }
 }
 

@@ -54,17 +54,12 @@ public class FragmentTag extends Fragment {
             for(k=1;k<=i;k++) {
                 editTextTitle=pref.getString("title"+k, "");
                 editTextContent=pref.getString("content"+k, "");
-
                 TagClass item=new TagClass(editTextTitle,editTextContent);
                 Data.tagListAdd(item);
             }
-
         }
-
-
         View view=inflater.inflate(R.layout.fragment_tag_layout, container, false);
         adapter=new TagAdapter(getActivity(), R.layout.tag_item, Data.getTagList());
-
         ListView listView=(ListView) view.findViewById(R.id.tag_list);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,12 +78,9 @@ public class FragmentTag extends Fragment {
             @Override
             public void onClick(View v) {
                 showInputDialog();
-
-
             }
         });
         return view;
-
     }
     public void showInputDialog(){
         LayoutInflater factory = LayoutInflater.from(getActivity());
