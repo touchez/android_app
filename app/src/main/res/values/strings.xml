@@ -8,4 +8,6 @@
     <string name="hello_blank_fragment">this is nfc page</string>
     <string name="title1">标题：</string>
     <string name="title2">内容：</string>
+    <string name="channel_name">nfc wake up</string>
+    <string name="channel_description">use to wake up by nfc when screen off</string>
 </resources>
