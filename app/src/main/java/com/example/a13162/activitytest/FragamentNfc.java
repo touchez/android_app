@@ -7,8 +7,6 @@ import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentHostCallback;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentHostCallback;
 
 import java.util.Arrays;
 
@@ -40,25 +41,13 @@ public class FragamentNfc extends Fragment {
     private Switch switch2;
     private Switch switch3;
     private ArrayAdapter<String> adapter;
-    private Runnable runnable=new Runnable(){
-         public void run(){
-             SharedPreferences pref=getContext().getSharedPreferences("nfc", MODE_PRIVATE);
-             String switch1true=pref.getString("pages/activeCheck/activeCheck?type=exsanguinate","");
-             if(Data.getnfclist().contains("pages/activeCheck/activeCheck?type=exsanguinate")&&(!switch1.isChecked()))
-             {
-                 System.out.println(switch1true);
-                 switch1.setChecked(true);
-                 /*deleteData("switch1True");*/
-             }
-            handler.postDelayed(this,100);//每一秒更新一次
-        }
-    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_nfc_layout, container, false);
-        handler.postDelayed(runnable,100);
+
         for (int i = 0; i < Data.getnfclist().size(); i++) {
             System.out.println(Data.getnfclist().get(i));
         }
@@ -166,6 +155,8 @@ public class FragamentNfc extends Fragment {
                     if(!Data.getnfclist().contains("pages/index/index")) {
                         Data.getnfclist().add("pages/index/index");//单车
                         saveData("pages/index/index");
+                        Data.getnfclist().add("pages/openLockSuccess/openLockSuccess");//单车
+                        saveData("pages/openLockSuccess/openLockSuccess");
                         for (int i = 0; i < Data.getnfclist().size(); i++) {
                             System.out.println(Data.getnfclist().get(i));
                         }
@@ -184,6 +175,13 @@ public class FragamentNfc extends Fragment {
                     for(int i=0;i<Data.getnfclist().size();i++)
                     {
                         System.out.println(Data.getnfclist().get(i));
+                    }
+                    int temp1=100;
+                    temp1=Data.getnfclist().indexOf("pages/openLockSuccess/openLockSuccess");
+                    if(temp1!=100)
+                    {
+                        Data.getnfclist().remove(temp1);
+                        deleteData("pages/openLockSuccess/openLockSuccess");
                     }
                     deleteData("switch2True");
                 }

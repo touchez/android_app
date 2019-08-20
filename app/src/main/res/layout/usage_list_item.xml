@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/nfc_usage_title"
+        android:layout_width="149dp"
+        android:layout_height="41dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#0D0D0D"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/nfc_usage_icon"
+        app:layout_constraintTop_toTopOf="@+id/nfc_usage_icon"
+        tools:text="共享单车" />
+
+    <TextView
+        android:id="@+id/nfc_usage_content"
+        android:layout_width="242dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:textColor="#0D0D0D"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/nfc_usage_icon"
+        app:layout_constraintTop_toBottomOf="@+id/nfc_usage_title"
+        tools:text="成功开锁 \ndata: 123" />
+
+    <ImageView
+        android:id="@+id/nfc_usage_icon"
+        android:layout_width="117dp"
+        android:layout_height="134dp"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

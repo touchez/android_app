@@ -1,11 +1,12 @@
-package com.example.a13162.activitytest.ViewModel;
+package com.example.a13162.activitytest.viewmodel;
 
 
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
 
-import com.example.a13162.activitytest.DataBase.AppDataBase;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import com.example.a13162.activitytest.database.AppDataBase;
 import com.example.a13162.activitytest.entity.NfcUsageEntity;
 import com.example.a13162.activitytest.utils.DatabaseInitializer;
 
@@ -29,8 +30,10 @@ public class NfcUsageViewModel extends AndroidViewModel {
         mdb = AppDataBase.getInstance(this.getApplication());
     }
 
-    public void insert(String xcxName, String xcxPath, Date date) {
-        DatabaseInitializer.addNfcUsageEntity(mdb, xcxName, xcxPath, date);
+    public void insert(String xcxName, String xcxPath) {
+        DatabaseInitializer.insertAsync(mdb, xcxName, xcxPath);
     }
+
+
 
 }

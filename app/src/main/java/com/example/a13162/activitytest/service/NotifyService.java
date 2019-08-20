@@ -5,16 +5,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.a13162.activitytest.MainActivity;
 import com.example.a13162.activitytest.R;
-
-import static android.app.Notification.VISIBILITY_PUBLIC;
 
 public class NotifyService extends Service {
 
@@ -67,7 +64,7 @@ public class NotifyService extends Service {
                 .setContentTitle(textTitle)
                 .setContentText(textContent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setVisibility(VISIBILITY_PUBLIC)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);

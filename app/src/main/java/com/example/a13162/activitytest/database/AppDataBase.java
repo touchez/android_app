@@ -1,4 +1,4 @@
-package com.example.a13162.activitytest.DataBase;
+package com.example.a13162.activitytest.database;
 
 import android.content.Context;
 
@@ -6,10 +6,10 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.a13162.activitytest.DAO.NfcUsageDAO;
+import com.example.a13162.activitytest.dao.NfcUsageDAO;
 import com.example.a13162.activitytest.entity.NfcUsageEntity;
 
-@Database(entities = {NfcUsageEntity.class}, version = 1)
+@Database(entities = {NfcUsageEntity.class}, version = 1, exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
     private volatile static AppDataBase INSTANCE;
 

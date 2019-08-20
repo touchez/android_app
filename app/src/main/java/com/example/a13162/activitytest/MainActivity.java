@@ -4,14 +4,12 @@ import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.arch.lifecycle.Observer;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -21,31 +19,33 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.PowerManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Adapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
-import com.example.a13162.activitytest.Adapter.MyListViewAdapter;
-import com.example.a13162.activitytest.ViewModel.NfcUsageViewModel;
+import com.example.a13162.activitytest.adapter.MyListViewAdapter;
+import com.example.a13162.activitytest.utils.HttpRequestUtil;
+import com.example.a13162.activitytest.utils.NotificationUtil;
+import com.example.a13162.activitytest.viewmodel.NfcUsageViewModel;
 import com.example.a13162.activitytest.entity.NfcUsageEntity;
 import com.example.a13162.activitytest.service.NotifyService;
-import com.example.a13162.activitytest.utils.DatabaseInitializer;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
@@ -76,9 +76,7 @@ public class MainActivity extends BaseNfcActivity {
     private PowerManager pm;
     private String CHANNEL_ID = "default";
     private NfcUsageViewModel mViewModel;
-    private ListView nfcUsageView;
-    private MyListViewAdapter listViewAdapter;
-    private List<NfcUsageEntity> nfcUsageList;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,7 +104,7 @@ public class MainActivity extends BaseNfcActivity {
     }
     @Override
     public void onNewIntent(Intent intent) {
-        Log.d("abcd","a new intent");
+        Log.d("touchez","a new intent");
         resolveIntent(intent);
     }
     @Override
@@ -118,7 +116,10 @@ public class MainActivity extends BaseNfcActivity {
         setSupportActionBar(toolbar);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
+
         SharedPreferences pref=getSharedPreferences("nfc", MODE_PRIVATE);
            String string=pref.getString("pages/activeCheck/activeCheck?type=exsanguinate","");
            if(string!=null&&!Data.getnfclist().contains(string)) {
@@ -160,33 +161,37 @@ public class MainActivity extends BaseNfcActivity {
         if(string9!=null&&!Data.getnfclist().contains(string9)) {
             Data.getnfclist().add(string9);
         }
+        String string10=pref.getString("pages/openLockSuccess/openLockSuccess","");
+        if(string10!=null&&!Data.getnfclist().contains(string10)) {
+            Data.getnfclist().add(string10);
+        }
         for(int i=0;i<Data.getnfclist().size();i++)
         {
             System.out.println(Data.getnfclist().get(i));
         }
-//        viewPager = (ViewPager) findViewById(R.id.vp);
-//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//            }
-//            @Override
-//            public void onPageSelected(int position) {
-//                if (menuItem != null) {
-//                    menuItem.setChecked(false);
-//                } else {
-//                    bottomNavigationView.getMenu().getItem(0).setChecked(false);
-//                }
-//                menuItem = bottomNavigationView.getMenu().getItem(position);
-//                menuItem.setChecked(true);
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
-//        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-//        viewPager.setAdapter(viewPagerAdapter);
+        viewPager = (ViewPager) findViewById(R.id.vp);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected(int position) {
+                if (menuItem != null) {
+                    menuItem.setChecked(false);
+                } else {
+                    bottomNavigationView.getMenu().getItem(0).setChecked(false);
+                }
+                menuItem = bottomNavigationView.getMenu().getItem(position);
+                menuItem.setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
         f=new FragamentNfc();
         tag=new FragmentTag();
         List<Fragment> list = new ArrayList<>();
@@ -195,37 +200,19 @@ public class MainActivity extends BaseNfcActivity {
         list.add(tag);//标签页面
         //list.add(TestFragment.newInstance(""));
         viewPagerAdapter.setList(list);
+        viewPager.setAdapter(viewPagerAdapter);
         startFlag=true;
+
+        mViewModel = new ViewModelProvider(this).get(NfcUsageViewModel.class);
+        Log.i("touchez", "mViewModel is null? " + (mViewModel == null));
+
         //直接跳转小程序
         resolveIntent(getIntent());
         startFlag=false;
-        //viewPager.setCurrentItem(1);
 
 
-        nfcUsageView = findViewById(R.id.nfc_usage_list);
-        listViewAdapter = new MyListViewAdapter(getApplicationContext(), nfcUsageList);
-        nfcUsageView.setAdapter(listViewAdapter);
 
-        mViewModel = ViewModelProviders.of(this).get(NfcUsageViewModel.class);
-        subscribeUiNfcUsage();
     }
-
-    private void subscribeUiNfcUsage() {
-        mViewModel.nfcUsages.observe(this, new Observer<List<NfcUsageEntity>>() {
-            @Override
-            public void onChanged(@Nullable List<NfcUsageEntity> nfcUsageEntities) {
-                showNfcUsageInUi(nfcUsageEntities);
-            }
-        });
-    }
-
-    private void showNfcUsageInUi(final List<NfcUsageEntity> nfcUsageEntities) {
-        nfcUsageList.clear();
-        nfcUsageList.addAll(nfcUsageEntities);
-
-        listViewAdapter.notifyDataSetChanged();
-    }
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
@@ -341,17 +328,8 @@ public class MainActivity extends BaseNfcActivity {
         }
     }
 
-    private void resolveIntent(Intent intent){
+    private void resolveIntent(final Intent intent){
         Log.i("touchez", "get intent");
-
-        //通过通知来进行跳转
-        if (intent.hasExtra("tagInfo")) {
-            String jumpFromService = intent.getExtras().getString("tagInfo");
-            Log.i("touchez", "intent data is: " + jumpFromService);
-            String[] res = resolveXCXIdAndPath(jumpFromService);
-            jumpToXCX(res[0], res[1]);
-
-        }
 
         String action=intent.getAction();
         if(NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
@@ -389,35 +367,20 @@ public class MainActivity extends BaseNfcActivity {
 
             }
 
-            mViewModel.insert(xcx, path, new Date());
 
-            if (pm == null) {
-                initPowerManager();
-            }
 
-            //点亮屏幕
-            if (!pm.isInteractive()) {
-                Log.i("touchez", "屏幕是黑的，准备点亮");
-                if (path.equals("pages/index/index")) {
-                    Log.i("touchez", "点亮屏幕");
-                    wakeScreen();
-
-                }else {
-                    wakeScreen();
-                    showNotification(mTagText);
-                    onBackPressed();
-                    return;
-                }
-
-            }
 
 
             //在外面扫到小程序直接跳
             if(startFlag==true&&xcx!=null){
+
+
                 startFlag=false;
                 jumpToXCX(xcx,path);
                 return;
             }
+
+            Log.i("touchez", "getIsactive is: " + Data.getIsactive());
 
             if(Data.getIsactive()==0){
                 viewPager.setCurrentItem(2);
@@ -448,13 +411,25 @@ public class MainActivity extends BaseNfcActivity {
                     dialog.setMessage(mTagText);
                     dialog.show();
                 }
+            }
+        }
 
-
+        final Bundle extras = intent.getExtras();
+        //通过通知来进行跳转
+        if (extras != null) {
+            final String jumpFromService = extras.getString("tagInfo");
+            if (jumpFromService != null) {
+                Log.i("touchez", "intent data is: " + jumpFromService);
+                String[] res = resolveXCXIdAndPath(jumpFromService);
+                jumpToXCX(res[0], res[1]);
             }
         }
     }
     //跳转小程序
     private void jumpToXCX(String xcxid,String xcxpath){
+
+
+
         String appId = "wx22f60e47bd1eb936"; // 填应用AppId
         IWXAPI api = WXAPIFactory.createWXAPI(MainActivity.this, appId);
 
@@ -462,10 +437,42 @@ public class MainActivity extends BaseNfcActivity {
         req.userName = xcxid; // 填小程序原始id
         if(xcxpath!=null){
             if(Data.getnfclist().contains(xcxpath)) {
+
+                if (pm == null) {
+                    initPowerManager();
+                }
+
+                //点亮屏幕
+                if (!pm.isInteractive()) {
+                    Log.i("touchez", "屏幕是黑的，准备点亮");
+                    if (xcxpath.equals("pages/index/index")) {
+                        //针对共享单车开锁的情况特殊处理
+                        Log.i("touchez", "点亮屏幕");
+                        wakeScreen();
+                        mTagText = mTagText.replace("pages/index/index", "pages/openLockSuccess/openLockSuccess");
+                        Log.i("touchez", "mTagText is: " + mTagText);
+
+                        NotificationUtil notificationUtil = new NotificationUtil(this);
+                        notificationUtil.showNotification(mTagText, "共享单车", "已成功开锁！");
+
+                        HttpRequestUtil.callOpenLock();
+                        onBackPressed();
+                        return;
+                    }else {
+                        wakeScreen();
+                        NotificationUtil notificationUtil = new NotificationUtil(this);
+                        notificationUtil.showNotification(mTagText, "检测到nfc标签", "要前往touchez小程序？");
+                        onBackPressed();
+                        return;
+                    }
+
+                }
+
                 System.out.println("找到了");
                 req.path = xcxpath;
                 req.miniprogramType = WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_PREVIEW;// 可选打开 开发版，体验版和正式版
                 api.sendReq(req);
+                mViewModel.insert(xcxid, xcxpath);
             }
             else
             {
@@ -476,62 +483,6 @@ public class MainActivity extends BaseNfcActivity {
        /* req.miniprogramType = WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_PREVIEW;// 可选打开 开发版，体验版和正式版
         api.sendReq(req);*/
     }
-
-    private void showNotification(String tagInfo) {
-        String textTitle = "检测到nfc标签";
-        String textContent = "要前往touchez小程序？";
-
-        createNotificationChannel();
-
-        // Create an explicit intent for an Activity in your app
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("tagInfo", tagInfo);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_directions_bike_black_24dp)
-                .setContentTitle(textTitle)
-                .setContentText(textContent)
-                .setWhen(System.currentTimeMillis())
-                // Set the intent that will fire when the user taps the notification
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-
-        int notificationId = 1;
-        Log.i("touchez", "show notify");
-        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        // notificationId is a unique int for each notification that you must define
-        manager.notify(notificationId, builder.build());
-    }
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            manager.createNotificationChannel(channel);
-        }
-    }
-
-
-    private void startNotificationService(String mTagText) {
-        Log.i("touchez", "ready to start NotificationService");
-        //开启一个发送notification的service
-        Intent intentService = new Intent(MainActivity.this, NotifyService.class);
-        intentService.putExtra("tagInfo", mTagText);
-        startService(intentService);
-    }
-
     /**
      * 解析小程序的id和path
      * @param mTagText tag中的信息

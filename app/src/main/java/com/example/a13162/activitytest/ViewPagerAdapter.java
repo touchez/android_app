@@ -1,8 +1,8 @@
 package com.example.a13162.activitytest;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     }
 
     public ViewPagerAdapter(FragmentManager fm) {
-        super(fm);
+        super(fm, BEHAVIOR_SET_USER_VISIBLE_HINT);
     }
 
     @Override

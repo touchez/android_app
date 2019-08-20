@@ -1,5 +1,6 @@
 package com.example.a13162.activitytest.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -25,4 +26,19 @@ public class NfcUsageEntity {
     @ColumnInfo(name = "date")
     @TypeConverters(DateConverter.class)
     public Date date;
+
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("name: ");
+        stringBuilder.append(xcxName);
+        stringBuilder.append("\n");
+        stringBuilder.append("path: ");
+        stringBuilder.append(xcxPath);
+        stringBuilder.append("\n");
+        stringBuilder.append("date: ");
+        stringBuilder.append(date.toString());
+        return stringBuilder.toString();
+    }
 }

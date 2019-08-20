@@ -2,15 +2,27 @@ package com.example.a13162.activitytest;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.dueeeke.videoplayer.player.IjkVideoView;
+import com.example.a13162.activitytest.adapter.MyListViewAdapter;
+import com.example.a13162.activitytest.entity.NfcUsageEntity;
+import com.example.a13162.activitytest.viewmodel.NfcUsageViewModel;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 /**
@@ -19,6 +31,10 @@ import com.dueeeke.videoplayer.player.IjkVideoView;
 public class TestFragment extends Fragment {
 
     private TextView tv;
+
+    private List<NfcUsageEntity> nfcUsageList;
+    private NfcUsageViewModel mViewModel;
+    private MyListViewAdapter listViewAdapter;
 
     public static TestFragment newInstance(String name) {
 
@@ -36,39 +52,32 @@ public class TestFragment extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onViewCreated(View view, Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        tv = (TextView) view.findViewById(R.id.fragment_test_tv);
-//
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String name = bundle.get("name").toString();
-//            tv.setText(name);
-//        }
-//
-//    }
     private void initView(View view) {
-        RecyclerView recyclerView = view.findViewById(R.id.rv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new VideoRecyclerViewAdapter(DataUtil.getVideoList()));
-        recyclerView.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
-            @Override
-            public void onChildViewAttachedToWindow(View view) {
+        ListView nfcUsageView = view.findViewById(R.id.nfc_usage_list);
+        nfcUsageList = new ArrayList<>();
+        listViewAdapter = new MyListViewAdapter(getContext(), nfcUsageList);
+        nfcUsageView.setAdapter(listViewAdapter);
 
-            }
+        mViewModel = new ViewModelProvider(this).get(NfcUsageViewModel.class);
 
+        subscribeUiNfcUsage();
+    }
+
+    private void subscribeUiNfcUsage() {
+        mViewModel.nfcUsages.observe(this, new Observer<List<NfcUsageEntity>>() {
             @Override
-            public void onChildViewDetachedFromWindow(View view) {
-                IjkVideoView ijkVideoView = view.findViewById(R.id.video_player);
-                if (ijkVideoView != null && !ijkVideoView.isFullScreen()) {
-//                    Log.d("@@@@@@", "onChildViewDetachedFromWindow: called");
-//                    int tag = (int) ijkVideoView.getTag();
-//                    Log.d("@@@@@@", "onChildViewDetachedFromWindow: position: " + tag);
-                    ijkVideoView.stopPlayback();
-                }
+            public void onChanged(@Nullable List<NfcUsageEntity> nfcUsageEntities) {
+                showNfcUsageInUi(nfcUsageEntities);
             }
         });
+    }
+
+    private void showNfcUsageInUi(final List<NfcUsageEntity> nfcUsageEntities) {
+        nfcUsageList.clear();
+        nfcUsageList.addAll(nfcUsageEntities);
+        Collections.reverse(nfcUsageList);
+
+        listViewAdapter.notifyDataSetChanged();
     }
 
 }

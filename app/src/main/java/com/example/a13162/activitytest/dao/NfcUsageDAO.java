@@ -1,9 +1,8 @@
-package com.example.a13162.activitytest.DAO;
+package com.example.a13162.activitytest.dao;
 
-import android.arch.lifecycle.LiveData;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.TypeConverters;
