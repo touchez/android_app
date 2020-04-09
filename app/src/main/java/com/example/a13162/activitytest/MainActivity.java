@@ -387,11 +387,9 @@ public class MainActivity extends BaseNfcActivity {
 
 
                 startFlag=false;
-                if (mTagText!=null&&mTagText.indexOf("alipays:")==0) {
-                    jumpToZFBXCX(xcx, path);
-                }else {
-                    jumpToXCX(xcx,path);
-                }
+
+                multiJump(mTagText, xcx, path);
+
 
                 return;
             }
@@ -411,11 +409,7 @@ public class MainActivity extends BaseNfcActivity {
                     dialog.setPositiveButton("跳转", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (mTagText!=null&&mTagText.indexOf("alipays:")==0) {
-                                jumpToZFBXCX(str, str1);
-                            }else {
-                                jumpToXCX(str,str1);
-                            }
+                            multiJump(mTagText, str, str1);
                         }
                     });
                     dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -443,6 +437,31 @@ public class MainActivity extends BaseNfcActivity {
                 String[] res = resolveXCXIdAndPath(jumpFromService);
                 jumpToXCX(res[0], res[1]);
             }
+        }
+    }
+
+    private void multiJump(String mTagText, String xcx, String path) {
+        if (mTagText!=null&&mTagText.indexOf("alipays:")==0) {
+            jumpToZFBXCX(xcx, path);
+        }else if (mTagText!=null&&mTagText.indexOf("hap:")==0) {
+            jumpToQuickApp(xcx, path);
+        }else {
+            jumpToXCX(xcx,path);
+        }
+    }
+
+    //跳转快应用
+    private void jumpToQuickApp(String xcxid, String xcxpath) {
+        String path = "hap://app/" + xcxid + "/" + xcxpath;
+        Uri data = Uri.parse(path);
+        Intent intent = new Intent(Intent.ACTION_VIEW,data);
+        //保证新启动的APP有单独的堆栈，如果希望新启动的APP和原有APP使用同一个堆栈则去掉该项
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            startActivityForResult(intent, RESULT_OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(MainActivity.this, "没有匹配的APP，请下载安装",Toast.LENGTH_SHORT).show();
         }
     }
 
