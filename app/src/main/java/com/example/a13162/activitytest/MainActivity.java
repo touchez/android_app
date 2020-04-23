@@ -376,6 +376,16 @@ public class MainActivity extends BaseNfcActivity {
                     path=mTagText.substring(i);
                 }
                 Log.d("xcx","xcx id is "+xcx+" path is "+path);
+            } else if (mTagText!=null&&mTagText.indexOf("hap:")==0) {
+                i=mTagText.indexOf("path:");
+                if(i<0){
+                    xcx=mTagText.substring(4);
+                }else{
+                    xcx=mTagText.substring(4,i);
+                    i=i+5;
+                    path=mTagText.substring(i);
+                }
+                Log.d("xcx","xcx id is "+xcx+" path is "+path);
             }
 
 
