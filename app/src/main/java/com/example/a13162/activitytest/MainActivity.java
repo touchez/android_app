@@ -510,11 +510,11 @@ public class MainActivity extends BaseNfcActivity {
                 //点亮屏幕
                 if (!pm.isInteractive()) {
                     Log.i("touchez", "屏幕是黑的，准备点亮");
-                    if (xcxpath.equals("pages/index/index")) {
+                    if (xcxpath.equals("pages/lock/index")) {
                         //针对共享单车开锁的情况特殊处理
                         Log.i("touchez", "点亮屏幕");
                         wakeScreen();
-                        mTagText = mTagText.replace("pages/index/index", "pages/openLockSuccess/openLockSuccess");
+                        mTagText = mTagText.replace("pages/lock/index", "pages/openLockSuccess/openLockSuccess");
                         Log.i("touchez", "mTagText is: " + mTagText);
 
                         NotificationUtil notificationUtil = new NotificationUtil(this);
