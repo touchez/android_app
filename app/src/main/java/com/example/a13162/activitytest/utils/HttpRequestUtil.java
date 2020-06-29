@@ -10,7 +10,7 @@ import okhttp3.Response;
 
 public class HttpRequestUtil {
 
-    private static final String openLockUrl = "https://touchez.cn:8090/pyapi/openlock";
+    private static final String openLockUrl = "http://touchez.cn:8088/api/v1/openlock";
 
     public static void callOpenLock(){
 
