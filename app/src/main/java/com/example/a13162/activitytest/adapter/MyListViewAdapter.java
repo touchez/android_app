@@ -56,6 +56,7 @@ public class MyListViewAdapter extends BaseAdapter {
 
         switch (nfcUsageEntity.xcxPath) {
             //共享单车相关小程序
+            case "open":
             case "pages/index/index":
             case "pages/openLockSuccess/openLockSuccess":
                 title = "共享单车";
