@@ -472,17 +472,24 @@ public class MainActivity extends BaseNfcActivity {
     //跳转快应用
     private void jumpToQuickApp(String xcxid, String xcxpath) {
         String path = "hap://app/" + xcxid + "/" + xcxpath;
-        mViewModel.insert(xcxid, xcxpath);
-        Uri data = Uri.parse(path);
-        Intent intent = new Intent(Intent.ACTION_VIEW,data);
-        //保证新启动的APP有单独的堆栈，如果希望新启动的APP和原有APP使用同一个堆栈则去掉该项
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        try {
-            startActivityForResult(intent, RESULT_OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(MainActivity.this, "没有匹配的APP，请下载安装",Toast.LENGTH_SHORT).show();
+        if(xcxpath!=null){
+            if(Data.getnfclist().contains(xcxpath)) {
+                mViewModel.insert(xcxid, xcxpath);
+                Uri data = Uri.parse(path);
+                Intent intent = new Intent(Intent.ACTION_VIEW,data);
+                //保证新启动的APP有单独的堆栈，如果希望新启动的APP和原有APP使用同一个堆栈则去掉该项
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try {
+                    startActivityForResult(intent, RESULT_OK);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(MainActivity.this, "没有匹配的APP，请下载安装",Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                System.out.println("没找到");
+            }
         }
+        
     }
 
     // 跳转至支付宝小程序
