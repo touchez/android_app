@@ -126,6 +126,7 @@ public class MainActivity extends BaseNfcActivity {
         String str=pref.getString("open","");
         if (str == null || str.equals("")) {
             editor.putString("open","open");
+            editor.commit();
             str=pref.getString("open","");
         }
            if(str!=null&&!Data.getnfclist().contains(str)) {
