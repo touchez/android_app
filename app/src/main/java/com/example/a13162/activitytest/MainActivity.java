@@ -122,6 +122,15 @@ public class MainActivity extends BaseNfcActivity {
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
         SharedPreferences pref=getSharedPreferences("nfc", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        String str=pref.getString("open","");
+        if (str == null || str.equals("")) {
+            editor.putString("open","open");
+            str=pref.getString("open","");
+        }
+           if(str!=null&&!Data.getnfclist().contains(str)) {
+               Data.getnfclist().add(str);
+           }
            String string=pref.getString("pages/activeCheck/activeCheck?type=exsanguinate","");
            if(string!=null&&!Data.getnfclist().contains(string)) {
                Data.getnfclist().add(string);
